@@ -1,23 +1,22 @@
 package main
 
-
 import (
-	"testing"
-	"io/ioutil"
-	"strings"
-	"fmt"
-	"regexp"
 	"errors"
+	"fmt"
+	"io/ioutil"
+	"regexp"
+	"strings"
+	"testing"
 )
 
-
 func TestSimpleAddition(t *testing.T) {
-	if (2+2 != 4) {
+	if 2+2 != 4 {
 		t.Error("Addition not working")
 	}
 }
 
 func TestCollectFromFile(t *testing.T) {
+	//noinspection ALL
 	var filepath string = "jfc_testdata/simple.json"
 	jsn, err := loadJsonFromFile(filepath)
 	if err != nil {
@@ -31,12 +30,11 @@ func TestCollectFromFile(t *testing.T) {
 	}
 }
 
-
-
+//noinspection SpellCheckingInspection
 func CompareStringsByLine(a, b string) error {
 	var listsplit = strings.Split(b, "\n")
 	var resultsplit = strings.Split(a, "\n")
-	if (len(listsplit) != len(resultsplit)) {
+	if len(listsplit) != len(resultsplit) {
 		return errors.New(fmt.Sprintf("Unequal line numbers: %d vs %d", len(listsplit), len(resultsplit)))
 	}
 	var re1 = regexp.MustCompile(`\r`)
@@ -52,16 +50,16 @@ func CompareStringsByLine(a, b string) error {
 			fmt.Println(listsplit[i])
 			fmt.Println([]byte(resultsplit[i]))
 			fmt.Println([]byte(listsplit[i]))
-			return errors.New(fmt.Sprint("String result differing from should be on line " , i))
+			return errors.New(fmt.Sprint("String result differing from should be on line ", i))
 		}
 	}
 	return nil
 }
 
-
+//noinspection SpellCheckingInspection
 func loadStringFromFile(filepath string) (string, error) {
 	bytes, err := ioutil.ReadFile(filepath)
-	if (err != nil) {
+	if err != nil {
 		return "", err
 	} else {
 		return string(bytes), nil
