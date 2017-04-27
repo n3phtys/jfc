@@ -6,6 +6,7 @@ import (
 	"strconv"
 	"flag"
 	"os"
+	"sort"
 )
 
 func main() {
@@ -96,7 +97,17 @@ func contains(slice []string, value string) bool {
 }
 
 func printCollector(collector map[string][]string, n int, outputfile string) {
-	//TODO: print to console with given cmdline parameters
+
+	for k, v := range collector {
+		sort.Strings(v)
+		if (len(v) > n) {
+			//truncate
+			var diff int = len(v) - n
+			var last_element string = "(... +" + strconv.FormatInt(int64(diff), 10) + " more unique values)"
+			collector[k] = append(v[0:n], last_element)
+		}
+	}
+
 	bytes, err := json.MarshalIndent(collector, "", "  ")
 	if (err != nil) {
 		println("Panic: could not pretty print collector!")
