@@ -4,10 +4,26 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"strconv"
+	"flag"
+	"os"
 )
 
 func main() {
-	println("Hello World")
+	var filename = flag.String("in", "./input.json", "Path to a JSON-file to be analyzed. Defaults to './input.json' .")
+	var numberEntries = flag.Int("n", 5, "Number of different values per field to be shown, defaults to 5")
+	var outputFile = flag.String("out", "", "Path to output file (where the output will be overwritten to). If not set, the output will be sent to STDOUT instead.")
+
+	flag.Parse()
+
+	jsn, err := loadJsonFromFile(*filename)
+	if err != nil {
+		panic(err.Error())
+	} else {
+		fieldname_default := "default_fieldname"
+		collector := make(map[string][]string)
+		walkJson(jsn, fieldname_default, collector)
+		printCollector(collector, *numberEntries, *outputFile)
+	}
 }
 
 
@@ -79,13 +95,24 @@ func contains(slice []string, value string) bool {
 	return false
 }
 
-func printCollector(collector map[string][]string) {
+func printCollector(collector map[string][]string, n int, outputfile string) {
 	//TODO: print to console with given cmdline parameters
-	bytes, err := json.MarshalIndent(collector, "", "    ")
+	bytes, err := json.MarshalIndent(collector, "", "  ")
 	if (err != nil) {
 		println("Panic: could not pretty print collector!")
 	} else {
-		println(string(bytes))
+		if (len(outputfile) > 0) {
+			f, err2 := os.Create(outputfile)
+			defer f.Close()
+			if (err2 == nil) {
+				f.WriteString(string(bytes))
+				f.Sync()
+			} else {
+				println(err2.Error())
+			}
+		} else {
+			println(string(bytes))
+		}
 	}
 }
 

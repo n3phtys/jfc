@@ -25,7 +25,7 @@ func TestCollectFromFile(t *testing.T) {
 	}
 	var collector = make(map[string][]string)
 	walkJson(jsn, "default_field", collector)
-	printCollector(collector)
+	printCollector(collector, 5, "")
 	if collector["a"][0] != "something" {
 		t.Error("Parsing didn't work")
 	}
