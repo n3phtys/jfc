@@ -18,10 +18,14 @@ func TestSimpleAddition(t *testing.T) {
 }
 
 func TestCollectFromFile(t *testing.T) {
-	var filepath string = "testdata/simple.json"
-	jsn, _ := loadJsonFromFile(filepath)
+	var filepath string = "jfc_testdata/simple.json"
+	jsn, err := loadJsonFromFile(filepath)
+	if err != nil {
+		t.Error(err.Error())
+	}
 	var collector = make(map[string][]string)
-	walkJson(jsn, collector)
+	walkJson(jsn, "default_field", collector)
+	printCollector(collector)
 	if collector["a"][0] != "something" {
 		t.Error("Parsing didn't work")
 	}
