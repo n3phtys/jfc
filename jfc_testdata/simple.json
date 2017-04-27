@@ -1,0 +1,11 @@
+{
+  "a" : "something",
+  "b" : false,
+  "c" : 2.50,
+  "d" : 42,
+  "e" : {
+    "p" : "hello",
+    "q" : "world"
+  },
+  "f" : ["x", "y", "z"]
+}
