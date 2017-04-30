@@ -26,9 +26,13 @@ func main() {
 		var buffer bytes.Buffer
 		scanner := bufio.NewScanner(os.Stdin)
 		for scanner.Scan() {
-			//println("Reading: "+ scanner.Text())
-			buffer.WriteString(scanner.Text())
-			buffer.WriteString(" ")
+			if (len(scanner.Text()) > 0) {
+				//println("Reading: "+ scanner.Text())
+				buffer.WriteString(scanner.Text())
+				buffer.WriteString(" ")
+			} else {
+				break
+			}
 		}
 		var str string = buffer.String()
 		err = json.Unmarshal([]byte(str), &jsn)
