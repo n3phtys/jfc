@@ -7,16 +7,33 @@ import (
 	"os"
 	"sort"
 	"strconv"
+	"bytes"
+	"bufio"
 )
 
 func main() {
-	var filename = flag.String("in", "./input.json", "Path to a JSON-file to be analyzed. Defaults to './input.json' .")
+	var filename = flag.String("in", "", "Path to a JSON-file to be analyzed. Defaults to './input.json' .")
 	var numberEntries = flag.Int("n", 5, "Number of different values per field to be shown, defaults to 5")
 	var outputFile = flag.String("out", "", "Path to output file (where the output will be overwritten to). If not set, the output will be sent to STDOUT instead.")
 
 	flag.Parse()
 
-	jsn, err := loadJsonFromFile(*filename)
+	var jsn json.RawMessage
+	var err error
+	if (len(*filename) > 0) {
+		jsn, err = loadJsonFromFile(*filename)
+	} else {
+		var buffer bytes.Buffer
+		scanner := bufio.NewScanner(os.Stdin)
+		for scanner.Scan() {
+			//println("Reading: "+ scanner.Text())
+			buffer.WriteString(scanner.Text())
+			buffer.WriteString(" ")
+		}
+		var str string = buffer.String()
+		err = json.Unmarshal([]byte(str), &jsn)
+	}
+
 	if err != nil {
 		panic(err.Error())
 	} else {
